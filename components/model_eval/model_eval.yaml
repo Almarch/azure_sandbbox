@@ -1,0 +1,30 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: model_eval
+display_name: Evaluate Iris Model
+version: 1
+description: Evaluate trained model on test set and log metrics to MLflow
+
+inputs:
+  model:
+    type: uri_folder
+    description: Trained PyTorch model
+  xy_test:
+    type: uri_folder
+    description: Test data with features and target
+
+outputs:
+  metrics:
+    type: uri_folder
+    description: Evaluation metrics and confusion matrix
+
+code: .
+
+environment: azureml:iris_train@latest
+
+command: >-
+  python model_eval.py
+  --model ${{inputs.model}}
+  --xy_test ${{inputs.xy_test}}
+  --metrics ${{outputs.metrics}}

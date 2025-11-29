@@ -1,0 +1,4 @@
+*.amlignore*
+*.amltmp
+*-checkpoint*
+*.pyc

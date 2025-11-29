@@ -1,0 +1,40 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: data_split
+display_name: Split Iris Data
+version: 1
+description: Split prepared data into train and test sets with stratification
+
+inputs:
+  xy:
+    type: uri_folder
+    description: Prepared data with features and target
+  train_percent:
+    type: number
+    default: 70
+    description: Percentage of data for training (e.g., 70 for 70%)
+  seed_split:
+    type: number
+    default: 42
+    description: Random seed for reproducible splits
+
+outputs:
+  xy_train:
+    type: uri_folder
+    description: Training set
+  xy_test:
+    type: uri_folder
+    description: Test set
+
+code: .
+
+environment: azureml:iris_train@latest
+
+command: >-
+  python data_split.py
+  --xy ${{inputs.xy}}
+  --train_percent ${{inputs.train_percent}}
+  --seed_split ${{inputs.seed_split}}
+  --xy_train ${{outputs.xy_train}}
+  --xy_test ${{outputs.xy_test}}

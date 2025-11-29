@@ -1,0 +1,51 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: model_train
+display_name: Train Iris Model
+version: 1
+description: Train PyTorch neural network for Iris classification
+
+inputs:
+  xy_train:
+    type: uri_folder
+    description: Training data with features and target
+  lr:
+    type: number
+    default: 0.001
+    description: Learning rate for Adam optimizer
+  epochs:
+    type: number
+    default: 10
+    description: Number of training epochs
+  batch_size:
+    type: number
+    default: 16
+    description: Batch size for training
+  seed_train:
+    type: number
+    default: 42
+    description: Random seed for model initialization and training
+  log_model:
+    type: boolean
+    default: false
+    description: Whether to log model to MLflow
+
+outputs:
+  model:
+    type: uri_folder
+    description: Trained PyTorch model
+
+code: .
+
+environment: azureml:iris_train@latest
+
+command: >-
+  python model_train.py
+  --xy_train ${{inputs.xy_train}}
+  --lr ${{inputs.lr}}
+  --epochs ${{inputs.epochs}}
+  --batch_size ${{inputs.batch_size}}
+  --seed_train ${{inputs.seed_train}}
+  --log_model ${{inputs.log_model}}
+  --model ${{outputs.model}}
