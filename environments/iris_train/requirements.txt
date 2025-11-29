@@ -1,1 +1,4 @@
 mltable==1.6.1
+scikit-learn==1.3.2
+joblib==1.3.2
+seaborn==0.13.0

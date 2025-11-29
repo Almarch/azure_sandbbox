@@ -1,11 +1,13 @@
 from azure.ai.ml import Input
 from azure.ai.ml.dsl import pipeline
-from azure.ai.ml import load_component
+from azure.ai.ml import MLClient
+from azure.identity import DefaultAzureCredential
 
-components_dir = "./components/"
-data_split = load_component(source=f"{components_dir}/data_split/data_split.yaml")
-model_train = load_component(source=f"{components_dir}/model_train/model_train.yaml")
-model_eval = load_component(source=f"{components_dir}/model_eval/model_eval.yaml")
+ml_client = MLClient.from_config(credential=DefaultAzureCredential())
+
+data_split = ml_client.components.get(name="data_split", label="latest")
+model_train = ml_client.components.get(name="model_train", label="latest")
+model_eval = ml_client.components.get(name="model_eval", label="latest")
 
 @pipeline()
 def iris_evaluation_pipeline(

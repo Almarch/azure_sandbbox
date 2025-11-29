@@ -1,11 +1,13 @@
 from azure.ai.ml import Input
 from azure.ai.ml.dsl import pipeline
-from azure.ai.ml import load_component
-from pipelines.evaluation import iris_evaluation_pipeline
+from azure.ai.ml import MLClient
+from azure.identity import DefaultAzureCredential
 
-components_dir = "./components/"
-data_prepare = load_component(source=f"{components_dir}/data_prepare/data_prepare.yaml")
-model_train = load_component(source=f"{components_dir}/model_train/model_train.yaml")
+ml_client = MLClient.from_config(credential=DefaultAzureCredential())
+
+data_prepare = ml_client.components.get(name="data_prepare", label="latest")
+model_train = ml_client.components.get(name="model_train", label="latest")
+iris_evaluation_pipeline = ml_client.components.get(name="iris_evaluation_pipeline", label="latest")
 
 @pipeline()
 def iris_production_pipeline(
