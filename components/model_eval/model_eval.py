@@ -21,11 +21,11 @@ def main(args):
     mlflow.start_run()
 
     # Get model architecture
-    spec = importlib.util.spec_from_file_location("iris_model", args.archi)
-    model_module = importlib.util.module_from_spec(spec)
-    sys.modules["iris_model"] = model_module
-    spec.loader.exec_module(model_module)
-    IrisClassifier = model_module.IrisClassifier
+    spec_archi = importlib.util.spec_from_file_location("iris_architecture", args.archi)
+    archi_module = importlib.util.module_from_spec(spec_archi)
+    sys.modules["iris_architecture"] = archi_module
+    spec_archi.loader.exec_module(archi_module)
+    IrisArchitecture = archi_module.IrisArchitecture
     
     # Load test data (NumPy arrays)
     print(f"Loading test data from: {args.xy_test}")
@@ -46,7 +46,7 @@ def main(args):
     # Load trained model
     print(f"Loading model from: {args.model}")
     model_path = Path(args.model) / "model.pth"
-    model = IrisClassifier()
+    model = IrisArchitecture()
     model.load_state_dict(torch.load(model_path, weights_only=True))
     model.eval()
     

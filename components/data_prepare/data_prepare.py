@@ -32,9 +32,6 @@ def main(args):
     }
     y = df["Species"].map(species_mapping).values
     
-    # Create reverse mapping for inference
-    id_to_species = {v: k for k, v in species_mapping.items()}
-    
     print(f"\nOriginal feature statistics:")
     print(pd.DataFrame(X, columns=feature_columns).describe())
     
@@ -58,17 +55,14 @@ def main(args):
     mapping_path = Path(args.mapping)
     mapping_path.mkdir(parents=True, exist_ok=True)
     
-    mapping_file = mapping_path / "label_mapping.json"
+    mapping_file = mapping_path / "mapping.json"
     mapping_data = {
-        "species_to_id": species_mapping,
-        "id_to_species": id_to_species,
+        "labels": species_mapping,
         "features": feature_columns
     }
     
     with open(mapping_file, "w") as f:
         json.dump(mapping_data, f, indent=2)
-    
-    mlflow.log_artifact(mapping_file, artifact_path="mapping")
     
     print(f"Label mapping saved to: {mapping_file}")
     print(f"\nMapping: {species_mapping}")

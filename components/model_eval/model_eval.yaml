@@ -3,7 +3,6 @@ type: command
 
 name: model_eval
 display_name: Evaluate Iris Model
-version: 1
 description: Evaluate trained model on test set and log metrics to MLflow
 
 inputs:

@@ -3,7 +3,6 @@ type: command
 
 name: data_prepare
 display_name: Prepare Iris Data
-version: 1
 description: Load MLTable, prepare features (X) and target (y), normalize, and save as NumPy arrays
 
 inputs:

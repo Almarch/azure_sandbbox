@@ -25,11 +25,11 @@ def main(args):
     mlflow.start_run()
 
     # Get model architecture
-    spec = importlib.util.spec_from_file_location("iris_model", args.archi)
-    model_module = importlib.util.module_from_spec(spec)
-    sys.modules["iris_model"] = model_module
-    spec.loader.exec_module(model_module)
-    IrisClassifier = model_module.IrisClassifier
+    spec_archi = importlib.util.spec_from_file_location("iris_architecture", args.archi)
+    archi_module = importlib.util.module_from_spec(spec_archi)
+    sys.modules["iris_architecture"] = archi_module
+    spec_archi.loader.exec_module(archi_module)
+    IrisArchitecture = archi_module.IrisArchitecture
 
     # Log hyperparameters
     mlflow.log_param("learning_rate", args.lr)
@@ -59,7 +59,7 @@ def main(args):
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
     
     # Initialize model, loss, and optimizer
-    model = IrisClassifier()
+    model = IrisArchitecture()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     
@@ -135,9 +135,6 @@ def main(args):
     joblib.dump(scaler, scaler_file)
     print(f"\nScaler saved to: {scaler_file}")
 
-    if args.log_model:
-        mlflow.log_artifact(scaler_file, artifact_path="scaler")
-    
     # Print scaler parameters
     print(f"\nScaler parameters:")
     for mean, std in zip(scaler.mean_, scaler.scale_):
@@ -159,17 +156,10 @@ def main(args):
     plot_path = model_path / "training_curves.png"
     plt.savefig(plot_path, dpi=150, bbox_inches="tight")
     plt.close()
+
+    mlflow.log_artifact(str(plot_path))
     
     print(f"Training curves saved to: {plot_path}")
-    
-    # Log to MLflow
-    if args.log_model:
-        mlflow.log_artifact(str(plot_path))
-        mlflow.pytorch.log_model(
-            pytorch_model=model, 
-            artifact_path="model",
-            registered_model_name="iris-model"
-        )
     
     mlflow.end_run()
     print("Training pipeline completed successfully!")
@@ -183,7 +173,6 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs")
     parser.add_argument("--batch_size", type=int, default=16, help="Batch size for training")
     parser.add_argument("--seed_train", type=int, default=42, help="Random seed for reproducibility")
-    parser.add_argument("--log_model", type=bool, default=False, help="Whether to log model to MLflow")
     parser.add_argument("--model", type=str, help="Output model path")
     parser.add_argument("--scaler", type=str, help="Output scaler path")
     

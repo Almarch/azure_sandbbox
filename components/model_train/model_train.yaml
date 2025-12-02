@@ -3,7 +3,6 @@ type: command
 
 name: model_train
 display_name: Train Iris Model
-version: 1
 description: Train PyTorch neural network for Iris classification
 
 inputs:
@@ -29,10 +28,6 @@ inputs:
     type: number
     default: 42
     description: Random seed for model initialization and training
-  log_model:
-    type: boolean
-    default: false
-    description: Whether to log model to MLflow
 
 outputs:
   model:
@@ -54,6 +49,5 @@ command: >-
   --epochs ${{inputs.epochs}}
   --batch_size ${{inputs.batch_size}}
   --seed_train ${{inputs.seed_train}}
-  --log_model ${{inputs.log_model}}
   --model ${{outputs.model}}
   --scaler ${{outputs.scaler}}

@@ -1,0 +1,35 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: model_save
+display_name: Save Iris Model
+description: Save the model and all its dependencies as artefacts
+
+inputs:
+  model:
+    type: uri_folder
+    description: Trained PyTorch model
+  archi:
+    type: uri_file
+    description: Model architecture definition (Python file)
+  infer:
+    type: uri_file
+    description: Infer class for MLFlow model artifact
+  scaler:
+    type: uri_folder
+    description: Scaler parameters for inference
+  mapping:
+    type: uri_folder
+    description: Input mapping for the labels
+
+code: .
+
+environment: azureml:iris_train@latest
+
+command: >-
+  python model_save.py
+  --model ${{inputs.model}}
+  --archi ${{inputs.archi}}
+  --infer ${{inputs.infer}}
+  --scaler ${{inputs.scaler}}
+  --mapping ${{inputs.mapping}}

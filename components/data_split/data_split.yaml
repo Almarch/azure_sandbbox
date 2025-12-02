@@ -3,7 +3,6 @@ type: command
 
 name: data_split
 display_name: Split Iris Data
-version: 1
 description: Split prepared data into train and test sets with stratification
 
 inputs:

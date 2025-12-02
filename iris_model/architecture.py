@@ -1,7 +1,7 @@
 # components/shared/model_architecture.py
 import torch.nn as nn
 
-class IrisClassifier(nn.Module):
+class IrisArchitecture(nn.Module):
     """Simple PyTorch neural network for Iris classification"""
     def __init__(self):
         super().__init__()

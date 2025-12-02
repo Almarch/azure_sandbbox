@@ -37,7 +37,6 @@ def iris_evaluation_pipeline(
         epochs = epochs,
         seed_train = seed_train,
         batch_size = batch_size,
-        log_model = False,
     )
     model.compute = compute
 
